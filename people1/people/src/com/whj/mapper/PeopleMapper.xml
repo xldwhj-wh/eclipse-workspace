@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.whj.mapper.peopleMapper">
+	<!-- id:方法名 parameterType:定义参数类型 resultType:返回值类型. 如果方法返回值是list,在resultType中写List的泛型,因为mybatis 
+		对JDBC封装,一行一行读取数据 -->
+		<!-- mybatis3.2之前通过反射需找实体类的set方法，将查询到的数据赋值给对应的变量，3.2之后直接找实体类中的变量 -->
+	<select id="selAll" resultType="com.whj.pojo.People">
+		select * from people
+	</select>
+	<!-- parameterType代表出入参数的类型，使用#{}获取参数内容
+	#{0}表示第一个参数，也可使用#{param1}方式获取参数，此时 param1表示从第一个参数开始
+	只有一个参数的时候，#{}中的内容不做限制，SQL使用?占位符
+	注意${}和#{}的区别，${}使用字符串拼接不使用？，parameterType为对象时，${}可以使用对象中定义的字段，此时传入参数是对象
+	如果参数是对象，#{属性名}，如果参数是map，写成#{key},使用于需要传多值的情况 -->
+	<select id="selById" resultType="com.whj.pojo.People" parameterType="int">
+		select * from people where id=#{0}
+	</select>
+	<select id="selByIdMap" resultType="com.whj.pojo.People" parameterType="map">
+		select * from people where id=#{id} and name=#{name}
+	</select>
+</mapper>
