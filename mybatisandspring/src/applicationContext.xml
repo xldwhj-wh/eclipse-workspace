@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+       ">
+    <!-- 数据源封装类,数据源：获取数据库连接。spring-jdbc.jar
+    -->
+    <bean id="datasource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    	<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+    	<property name="url" value="jdbc:mysql://10.121.199.151:3306/ssm"></property>
+    	<property name="username" value="root"></property>
+    	<property name="password" value="1q2w!Q@W"></property>
+    </bean>
+    <!-- 创建SqlSessionFactory对象
+     -->
+    <bean id="factory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    	<property name="dataSource" ref="datasource"></property>
+    </bean>
+    
+    <!-- 扫描器，相当于mybatis.xml中mappers下的package标签
+     -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    	<!-- 扫描路径，运行后会生成com.learn.mapper下接口的实例，为接口名称首字母小写 
+    	-->
+    	<property name="basePackage" value="com.learn.mapper"></property>
+    	<!-- 默认类都是单例模式，此处传入factory修改后，会使bean id为factory实例变为扫描mybatis.xml的实例
+    	 相当于Resources.getResourceAsStream("mybatis.xml") -->
+    	<property name="sqlSessionFactory" ref="factory"></property>
+    </bean>
+    
+    <!-- 由spring管理service实例
+     -->
+    <bean id="flowerService" class="com.learn.service.impl.FlowerServiceImpl">
+    	<property name="folowerMapper" ref="flowerMapper"></property>
+    </bean>
+    
+</beans>
